@@ -1,0 +1,19 @@
+CC = g++
+CFLAGS = -O3
+CFLAGS += -std=c++11
+CFLAGS += -pthread
+TARGET_LIB = thread_pool
+TARGET_TEST = test/thread_pool_test
+
+all: lib$(TARGET_LIB).a $(TARGET_TEST)
+
+lib$(TARGET_LIB).a:
+	$(CC) thread_pool.cpp $(CFLAGS) -c -o $(TARGET_LIB).o
+	ar rcs lib$(TARGET_LIB).a $(TARGET_LIB).o
+	rm $(TARGET_LIB).o
+
+$(TARGET_TEST): lib$(TARGET_LIB).a
+	$(CC) test/test.cpp lib$(TARGET_LIB).a $(CFLAGS) -o $(TARGET_TEST)
+
+clean:
+	rm lib$(TARGET_LIB).a $(TARGET_TEST) $(TARGET_LIB).o
